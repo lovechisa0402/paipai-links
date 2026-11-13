@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>派派的連結頁</title>
+<meta name="description" content="派派的 App 下載與聯絡方式">
+<style>
+/* 單欄、淺色海邊風：淺天藍底、白色卡片、青綠色重點色 */
+:root {
+  --bg: #f1f9fb;
+  --surface: #ffffff;
+  --line: #d5e8ec;
+  --text: #17323b;
+  --muted: #5d7983;
+  --accent: #1e7a8c;
+  --accent-soft: #dff1f4;
+  --ok: #1d7a55;
+  --ok-soft: #dcf3e8;
+  --danger: #b3382c;
+  --font: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.7; }
+body { min-height: 100%; padding: 40px 16px 64px; }
+.wrap { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+img { max-width: 100%; }
+
+.me { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.avatar { width: 112px; height: 112px; border-radius: 50%; background: var(--accent-soft); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--line); display: grid; place-items: center; font-size: 42px; font-weight: 700; color: var(--accent); overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+h1 { margin: 6px 0 0; font-size: 26px; font-weight: 700; text-wrap: balance; }
+.bio { margin: 0; max-width: 36ch; color: var(--muted); font-size: 15px; text-wrap: balance; white-space: pre-line; }
+
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px; }
+.chip { display: inline-block; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; text-decoration: none; }
+a.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+h2 { margin: 0 0 12px; font-size: 13px; font-weight: 500; letter-spacing: .08em; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.cards { display: flex; flex-direction: column; gap: 14px; }
+.app-head { display: flex; gap: 14px; align-items: center; }
+.app-ico { width: 60px; height: 60px; border-radius: 15px; background: var(--accent-soft); border: 1px solid var(--line); display: grid; place-items: center; font-weight: 700; font-size: 22px; color: var(--accent); flex: none; overflow: hidden; }
+.app-ico img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.app-head h3 { margin: 0; font-size: 18px; font-weight: 700; }
+.app-head p { margin: 2px 0 0; font-size: 14px; color: var(--muted); }
+
+.dl { display: flex; flex-direction: column; gap: 10px; }
+.btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); text-decoration: none; font-size: 15px; font-weight: 500; }
+a.btn:hover { border-color: var(--accent); }
+.btn small { display: block; font-weight: 400; font-size: 13px; color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary small { color: #d2eef3; }
+.btn.off { color: var(--muted); border-style: dashed; cursor: default; }
+.tag { font-size: 12px; font-weight: 500; padding: 2px 10px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); white-space: nowrap; }
+.hint { margin: 0; font-size: 13px; color: var(--muted); white-space: pre-line; }
+
+.copy { display: flex; gap: 8px; align-items: stretch; }
+.copy code { flex: 1; min-width: 0; padding: 9px 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); font-size: 13px; overflow-x: auto; white-space: nowrap; color: var(--muted); }
+.copy button { font: inherit; font-size: 13px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.copy button:hover { border-color: var(--accent); }
+
+footer { text-align: center; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+footer a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===== 編輯模式（網址後面加 ?edit）===== */
+.bar { position: sticky; top: 0; z-index: 5; margin: -40px -16px 24px; padding: 10px 16px; background: var(--text); color: #fff; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bar b { font-weight: 500; font-size: 14px; flex: 1 1 100%; }
+.bar button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.4); background: transparent; color: #fff; cursor: pointer; }
+.bar button.go { background: #fff; color: var(--text); border-color: #fff; font-weight: 500; }
+.tip { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
+.ed input[type="text"], .ed textarea { width: 100%; font: inherit; font-size: 14px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); }
+.ed textarea { resize: vertical; min-height: 64px; }
+.ed .lab { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
+.ed .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ed .row > input { flex: 1 1 120px; min-width: 0; }
+.mini { font: inherit; font-size: 12px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.mini:hover { border-color: var(--accent); }
+.mini.del { color: var(--danger); }
+.mini:disabled { opacity: .4; cursor: default; }
+.block { border: 1px dashed var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px; background: var(--bg); }
+.pic { display: flex; align-items: center; gap: 12px; }
+.pic input[type="file"] { display: none; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--text); color: #fff; padding: 8px 16px; border-radius: 999px; font-size: 13px; z-index: 9; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="wrap" id="app"></main>
+
+<script id="cfg" type="application/json">{"name":"派派","bio":"天刀玩家，做公會排團小工具的人。\n這裡放我的 App 和聯絡方式。","avatar":"","chips":[{"label":"信箱","url":"mailto:yyanlin736@gmail.com"}],"appsTitle":"我做的 APP","apps":[{"name":"PaiPai 排團小工具","desc":"遊戲公會排團、聊天、語音、備忘錄","icon":"","links":[{"label":"開啟網頁版","note":"手機、電腦、iPhone 都能用","url":"https://bikini-bottom-seven.vercel.app","style":"primary","status":""},{"label":"Windows 電腦版","note":"下載安裝檔（未簽章，Windows 會跳警告）","url":"https://github.com/lovechisa0402/bikini-bottom-downloads/releases/latest/download/BikiniBottom-Setup.exe","style":"normal","status":""},{"label":"Google Play","note":"封閉測試中","url":"","style":"normal","status":"即將上架"}],"hint":"iPhone / iPad：用 Safari 開網頁版，按分享，選「加入主畫面」，就像 App 一樣使用。","copyUrl":"https://bikini-bottom-seven.vercel.app"}],"footer":[{"label":"隱私權政策","url":"https://bikini-bottom-seven.vercel.app/privacy.html"}],"contact":"yyanlin736@gmail.com"}</script>
+
+<script>
+(function () {
+  var SHELL = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;   // 下載新版時用它當模板
+  var DRAFT = 'links_draft_v1';
+  var EDIT = /(^|[?&])edit(=|&|$)/.test(location.search);
+  var app = document.getElementById('app');
+  var cfg = JSON.parse(document.getElementById('cfg').textContent);
+  var preview = false;
+  if (EDIT) { try { var d = localStorage.getItem(DRAFT); if (d) cfg = JSON.parse(d); } catch (e) {} }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function safeUrl(u) { u = String(u || '').trim(); if (!u) return ''; if (/^(https?:\/\/|mailto:)/i.test(u)) return u; if (/^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(u)) return 'https://' + u; return ''; }
+  function get(path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, cfg); }
+  function set(path, v) { var p = path.split('.'), last = p.pop(); var o = p.reduce(function (o, k) { return o[k]; }, cfg); o[last] = v; }
+  function save() { try { localStorage.setItem(DRAFT, JSON.stringify(cfg)); } catch (e) {} }
+  function toast(t) { var n = document.createElement('div'); n.className = 'toast'; n.textContent = t; document.body.appendChild(n); setTimeout(function () { n.remove(); }, 2200); }
+
+  function img(src, alt, fallback) { return src ? '<img src="' + esc(src) + '" alt="' + esc(alt) + '">' : esc(fallback); }
+
+  /* ---------- 一般瀏覽（訪客看到的）---------- */
+  function viewHtml() {
+    var h = '<section class="me" aria-label="自我介紹"><div class="avatar">' + img(cfg.avatar, cfg.name, (cfg.name || '?').slice(0, 1)) + '</div><h1>' + esc(cfg.name) + '</h1>';
+    if (cfg.bio) h += '<p class="bio">' + esc(cfg.bio) + '</p>';
+    var chips = (cfg.chips || []).map(function (c) { var u = safeUrl(c.url); return u && c.label ? '<a class="chip" href="' + esc(u) + '">' + esc(c.label) + '</a>' : ''; }).join('');
+    if (chips) h += '<div class="chips">' + chips + '</div>';
+    h += '</section>';
+    if ((cfg.apps || []).length) {
+      h += '<section aria-label="App 下載"><h2>' + esc(cfg.appsTitle) + '</h2><div class="cards">';
+      cfg.apps.forEach(function (a, ai) {
+        h += '<div class="card"><div class="app-head"><div class="app-ico">' + img(a.icon, a.name, (a.name || '?').slice(0, 1)) + '</div><div><h3>' + esc(a.name) + '</h3>' + (a.desc ? '<p>' + esc(a.desc) + '</p>' : '') + '</div></div><div class="dl">';
+        (a.links || []).forEach(function (l) {
+          var u = safeUrl(l.url);
+          var inner = '<span>' + esc(l.label) + (l.note ? '<small>' + esc(l.note) + '</small>' : '') + '</span>';
+          if (u) h += '<a class="btn ' + (l.style === 'primary' ? 'primary' : '') + '" href="' + esc(u) + '">' + inner + '<span aria-hidden="true">→</span></a>';
+          else h += '<div class="btn off">' + inner + (l.status ? '<span class="tag">' + esc(l.status) + '</span>' : '') + '</div>';
+        });
+        h += '</div>';
+        if (a.hint) h += '<p class="hint">' + esc(a.hint) + '</p>';
+        if (a.copyUrl) h += '<div class="copy"><code id="cu' + ai + '">' + esc(a.copyUrl) + '</code><button type="button" data-copy="cu' + ai + '">複製網址</button></div>';
+        h += '</div>';
+      });
+      h += '</div></section>';
+    }
+    var fl = (cfg.footer || []).map(function (f) { var u = safeUrl(f.url); return u && f.label ? '<a href="' + esc(u) + '">' + esc(f.label) + '</a>' : ''; }).join('');
+    if (fl || cfg.contact) h += '<footer>' + fl + (cfg.contact ? '<span>' + esc(cfg.contact) + '</span>' : '') + '</footer>';
+    return h;
+  }
+
+  /* ---------- 編輯畫面 ---------- */
+  function tx(label, path, area) {
+    var v = esc(get(path));
+    return '<label class="lab">' + label + '</label>' + (area ? '<textarea data-p="' + path + '">' + v + '</textarea>' : '<input type="text" data-p="' + path + '" value="' + v + '">');
+  }
+  function pic(label, path, ph) {
+    var v = get(path);
+    return '<div class="pic"><div class="' + (path.indexOf('apps') === 0 ? 'app-ico' : 'avatar') + '" style="' + (path.indexOf('apps') === 0 ? '' : 'width:72px;height:72px;font-size:28px') + '">' + img(v, label, ph) + '</div><div><span class="lab" style="margin:0 0 4px">' + label + '</span>' +
+      '<label class="mini">選圖片<input type="file" accept="image/*" data-pic="' + path + '"></label> ' + (v ? '<button type="button" class="mini del" data-act="clearpic" data-p="' + path + '">移除</button>' : '') + '</div></div>';
+  }
+  function editHtml() {
+    var h = '<div class="bar"><b>編輯模式：改完按「下載新版網站檔」，把下載的 index.html 傳到 GitHub 才會讓別人看到</b>' +
+      '<button type="button" class="go" data-act="export">下載新版網站檔</button><button type="button" data-act="preview">預覽</button><button type="button" data-act="reset">放棄草稿</button></div><div class="ed">';
+    h += '<section class="block">' + pic('頭像', 'avatar', (cfg.name || '?').slice(0, 1)) + tx('名字', 'name') + tx('自我介紹（可換行）', 'bio', true) + '</section>';
+    h += '<p class="tip" style="margin-top:20px">社群連結（網址要 https:// 開頭；信箱寫 mailto:你的信箱）</p><section class="block">';
+    (cfg.chips || []).forEach(function (c, i) {
+      h += '<div class="row"><input type="text" data-p="chips.' + i + '.label" value="' + esc(c.label) + '" placeholder="名稱，例如 Discord"><input type="text" data-p="chips.' + i + '.url" value="' + esc(c.url) + '" placeholder="https://…">' +
+        '<button type="button" class="mini" data-act="up" data-p="chips" data-i="' + i + '"' + (i === 0 ? ' disabled' : '') + '>↑</button><button type="button" class="mini" data-act="down" data-p="chips" data-i="' + i + '"' + (i === cfg.chips.length - 1 ? ' disabled' : '') + '>↓</button><button type="button" class="mini del" data-act="del" data-p="chips" data-i="' + i + '">刪除</button></div>';
+    });
+    h += '<div><button type="button" class="mini" data-act="addchip">＋ 新增社群連結</button></div></section>';
+    h += '<p class="tip" style="margin-top:20px">App 區</p><section class="block">' + tx('區塊標題', 'appsTitle') + '</section>';
+    (cfg.apps || []).forEach(function (a, ai) {
+      var b = 'apps.' + ai;
+      h += '<section class="block" style="margin-top:12px">' + pic('App 圖示', b + '.icon', (a.name || '?').slice(0, 1)) + tx('App 名稱', b + '.name') + tx('一句話介紹', b + '.desc');
+      h += '<span class="lab" style="margin-top:12px">下載／連結按鈕</span>';
+      (a.links || []).forEach(function (l, li) {
+        var p = b + '.links.' + li;
+        h += '<div class="block" style="background:var(--surface)">' + tx('按鈕文字', p + '.label') + tx('小字說明', p + '.note') + tx('網址（空白＝顯示成還沒開放）', p + '.url') + tx('網址空白時的標籤，例如「即將上架」', p + '.status') +
+          '<div class="row" style="margin-top:8px"><label class="mini"><input type="checkbox" data-chk="' + p + '.style"' + (l.style === 'primary' ? ' checked' : '') + '> 做成主按鈕（醒目色）</label>' +
+          '<button type="button" class="mini" data-act="up" data-p="' + b + '.links" data-i="' + li + '"' + (li === 0 ? ' disabled' : '') + '>↑</button><button type="button" class="mini" data-act="down" data-p="' + b + '.links" data-i="' + li + '"' + (li === a.links.length - 1 ? ' disabled' : '') + '>↓</button><button type="button" class="mini del" data-act="del" data-p="' + b + '.links" data-i="' + li + '">刪除按鈕</button></div></div>';
+      });
+      h += '<div><button type="button" class="mini" data-act="addlink" data-p="' + b + '.links">＋ 新增按鈕</button></div>' + tx('下方提示文字（沒有就清空）', b + '.hint', true) + tx('「複製網址」要複製的網址（沒有就清空）', b + '.copyUrl') +
+        '<div class="row" style="margin-top:10px"><button type="button" class="mini" data-act="up" data-p="apps" data-i="' + ai + '"' + (ai === 0 ? ' disabled' : '') + '>App ↑</button><button type="button" class="mini" data-act="down" data-p="apps" data-i="' + ai + '"' + (ai === cfg.apps.length - 1 ? ' disabled' : '') + '>App ↓</button><button type="button" class="mini del" data-act="del" data-p="apps" data-i="' + ai + '">刪除這個 App</button></div></section>';
+    });
+    h += '<div style="margin-top:12px"><button type="button" class="mini" data-act="addapp">＋ 新增 App</button></div>';
+    h += '<p class="tip" style="margin-top:20px">頁尾</p><section class="block">';
+    (cfg.footer || []).forEach(function (f, i) {
+      h += '<div class="row"><input type="text" data-p="footer.' + i + '.label" value="' + esc(f.label) + '" placeholder="名稱"><input type="text" data-p="footer.' + i + '.url" value="' + esc(f.url) + '" placeholder="https://…"><button type="button" class="mini del" data-act="del" data-p="footer" data-i="' + i + '">刪除</button></div>';
+    });
+    h += '<div><button type="button" class="mini" data-act="addfoot">＋ 新增頁尾連結</button></div>' + tx('聯絡信箱文字', 'contact') + '</section></div>';
+    return h;
+  }
+
+  function render() {
+    document.title = (cfg.name || '') + '的連結頁';
+    app.innerHTML = (EDIT && !preview) ? editHtml() : (EDIT ? '<div class="bar"><b>預覽中</b><button type="button" class="go" data-act="preview">回到編輯</button></div>' : '') + viewHtml();
+  }
+
+  /* ---------- 圖片縮小（頭像／圖示不要太大，網頁才快）---------- */
+  function shrink(file, size, cb) {
+    var r = new FileReader();
+    r.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var c = document.createElement('canvas'); c.width = c.height = size;
+        var s = Math.min(im.width, im.height), sx = (im.width - s) / 2, sy = (im.height - s) / 2;
+        c.getContext('2d').drawImage(im, sx, sy, s, s, 0, 0, size, size);
+        cb(c.toDataURL('image/png'));
+      };
+      im.onerror = function () { toast('這個檔案打不開，換一張圖試試'); };
+      im.src = r.result;
+    };
+    r.readAsDataURL(file);
+  }
+
+  function move(arr, i, d) { var j = i + d; if (j < 0 || j >= arr.length) return; var t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+
+  function exportHtml() {
+    var json = JSON.stringify(cfg).replace(/</g, '\\u003c');
+    var out = SHELL.replace(/(<script id="cfg" type="application\/json">)[\s\S]*?(<\/script>)/, function (m, a, b) { return a + json + b; });
+    var blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'index.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    toast('已下載 index.html，傳到 GitHub 覆蓋舊的就好');
+  }
+
+  app.addEventListener('input', function (e) {
+    var p = e.target.getAttribute && e.target.getAttribute('data-p');
+    if (EDIT && p && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) { set(p, e.target.value); save(); }
+  });
+  app.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.getAttribute('data-chk')) { set(t.getAttribute('data-chk'), t.checked ? 'primary' : 'normal'); save(); return; }
+    var pp = t.getAttribute('data-pic');
+    if (pp && t.files && t.files[0]) { shrink(t.files[0], pp === 'avatar' ? 320 : 192, function (u) { set(pp, u); save(); render(); }); }
+  });
+  app.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('button') : null;
+    if (!t) return;
+    var cp = t.getAttribute('data-copy');
+    if (cp) {
+      var txt = document.getElementById(cp).textContent;
+      try { navigator.clipboard.writeText(txt).then(function () { t.textContent = '已複製'; setTimeout(function () { t.textContent = '複製網址'; }, 1600); }, function () { t.textContent = '請長按網址複製'; }); } catch (x) { t.textContent = '請長按網址複製'; }
+      return;
+    }
+    var act = t.getAttribute('data-act'); if (!act) return;
+    var p = t.getAttribute('data-p'), i = Number(t.getAttribute('data-i'));
+    if (act === 'export') return exportHtml();
+    if (act === 'preview') { preview = !preview; return render(); }
+    if (act === 'reset') { if (confirm('放棄這台瀏覽器上的草稿，回到目前網站上的版本？')) { try { localStorage.removeItem(DRAFT); } catch (x) {} location.reload(); } return; }
+    if (act === 'clearpic') set(p, '');
+    else if (act === 'up') move(get(p), i, -1);
+    else if (act === 'down') move(get(p), i, 1);
+    else if (act === 'del') get(p).splice(i, 1);
+    else if (act === 'addchip') cfg.chips.push({ label: '', url: '' });
+    else if (act === 'addfoot') cfg.footer.push({ label: '', url: '' });
+    else if (act === 'addlink') get(p).push({ label: '新按鈕', note: '', url: '', style: 'normal', status: '即將上架' });
+    else if (act === 'addapp') cfg.apps.push({ name: '新的 App', desc: '', icon: '', links: [], hint: '', copyUrl: '' });
+    else return;
+    save(); render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
